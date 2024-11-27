@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/native";
-import { StatusBar } from "expo-status-bar";
+import React from "react";
 
+import { StatusBar } from "expo-status-bar";
 import Header from "../../components/header";
+import { Container } from "./styles";
 
 
 export default function Home() {
-  
-
   return (
     <Container>
-        <StatusBar style="auto" />
+      <StatusBar style="auto" />
       <Header />
-   
-    
     </Container>
   );
 }
 
-const Container = styled.SafeAreaView`
-  width: 100%;
-  // background-color: red;
-  height: 100%;
-`;

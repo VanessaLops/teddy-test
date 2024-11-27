@@ -1,4 +1,4 @@
-import { StyleSheet, View, Animated, NativeModules, Text, Image } from 'react-native'
+import { StyleSheet, View, Animated } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useEffect, useRef } from 'react'
 
