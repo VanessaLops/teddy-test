@@ -7,14 +7,15 @@ import ProductIcon from 'src/assets/icons/product';
 
 interface SlideUpSidebarModalProps {
   visible: boolean;
-  onSelectOption: (value: string) => void;
-  onClose: () => void;
+  onSelectOption: (value: string) => void;  
+  onClose: () => void; 
 }
 
 const SlideUpSidebarModal: React.FC<SlideUpSidebarModalProps> = ({ visible, onSelectOption, onClose }) => {
   const [slideAnim] = useState(new Animated.Value(0));
   const [opacityAnim] = useState(new Animated.Value(0));
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
 
   const sideNav = [
     {
@@ -32,10 +33,13 @@ const SlideUpSidebarModal: React.FC<SlideUpSidebarModalProps> = ({ visible, onSe
   ];
 
   const handleSelect = (item: string) => {
-    setSelectedItem(item);
+    console.log("Item selecionado no modal:", item); 
+    setSelectedItem(item);  
     onSelectOption(item);
-    onClose();
+    onClose(); 
   };
+  
+
 
   useEffect(() => {
     if (visible) {
@@ -77,7 +81,7 @@ const SlideUpSidebarModal: React.FC<SlideUpSidebarModalProps> = ({ visible, onSe
               {
                 translateY: slideAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [500, 0],
+                  outputRange: [500, 0],  
                 }),
               },
             ],
@@ -95,11 +99,12 @@ const SlideUpSidebarModal: React.FC<SlideUpSidebarModalProps> = ({ visible, onSe
                     borderRightColor: selectedItem === item.name ? '#EC6724' : 'transparent',
                   }}
                 >
-             
-                  {React.cloneElement(item.icon, {
-                    color: selectedItem === item.name ? '#EC6724' : '#0F0F0F',
-                  })}
-                  <Text style={{ left: 10, color: selectedItem === item.name ? '#EC6724' : '#0F0F0F' }}>
+                  {selectedItem === item.name ? (
+                    React.cloneElement(item.icon, {
+                      color: '#EC6724',  
+                    })
+                  ) : null}
+                  <Text style={{ left: 10, color: selectedItem === item.name ? '#EC6724' : 'black' }}>
                     {item.name}
                   </Text>
                 </View>

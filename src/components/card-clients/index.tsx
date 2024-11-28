@@ -23,6 +23,7 @@ import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
 import { getUsers } from 'src/services/user-service';
 import { Text, FlatList } from 'react-native';
+import ModalClient from '../modal/modal-add';
 
 interface User {
     id: string;
@@ -50,6 +51,7 @@ const Card: React.FC<CardProps> = ({
     handleSelectOption
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
+    const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState<UsersResponse | null>(null);
@@ -105,8 +107,8 @@ const Card: React.FC<CardProps> = ({
                             <ClientDetails>Salário: R${user.salary}</ClientDetails>
                             <ClientDetails>Empresa: {user.companyValuation}</ClientDetails>
                             <ActionButtonsContainer>
-                                <AddIcon onPress={() => setIsAddModalVisible(true)} />
-                                <EditIcon />
+                                <AddIcon onPress={() => setIsSelectModalClientVisible(true)} />
+                                <EditIcon onPress={() => setIsSelectModalClientVisible(true)} />
                                 <DeleteIcon />
                             </ActionButtonsContainer>
                         </ClientCard>
@@ -140,6 +142,15 @@ const Card: React.FC<CardProps> = ({
                     setIsSelectModalVisible(false);
                 }}
                 onClose={() => setIsSelectModalVisible(false)}
+            />
+
+            <ModalClient
+                visible={isSelectModalClientVisible}
+                onSelectOption={(value: string) => {
+                    handleSelectOption(value);
+                    setIsSelectModalClientVisible(false);
+                }}
+                onClose={() => setIsSelectModalClientVisible(false)}
             />
         </Container>
     );

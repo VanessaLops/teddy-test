@@ -11,6 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ handleSelectOption }) => {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
+  console.log(handleSelectOption)
   return (
     <Container>
       <ContainerMain>
@@ -19,15 +20,17 @@ const Header: React.FC<HeaderProps> = ({ handleSelectOption }) => {
           name="menu"
           color="#7A7A7A"
           size={30}
-          onPress={() => setIsAddModalVisible(true)}
+          onPress={() => setIsAddModalVisible(true)} 
         />
       </ContainerMain>
 
-  
       <SlideUpSidebarModal
         visible={isAddModalVisible}
-        onSelectOption={handleSelectOption}  
-        onClose={() => setIsAddModalVisible(false)}
+        onSelectOption={(option: string) => {
+          handleSelectOption(option);
+          setIsAddModalVisible(false);
+        }}
+        onClose={() => setIsAddModalVisible(false)} 
       />
     </Container>
   );
