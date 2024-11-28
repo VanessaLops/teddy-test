@@ -115,7 +115,7 @@ export const ActionButtonsContainer = styled.View`
 
 export const CreateButton = styled.TouchableOpacity`
   margin-top: 20px;
-  width: 350px;
+  width: 320px;
   border-color: #ec6724;
   border-width: 2px;
   border-radius: 4px;
@@ -138,6 +138,7 @@ export const PaginationContainer = styled.View`
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  margin-bottom:20px;
 `;
 
 
