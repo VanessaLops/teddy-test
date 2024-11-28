@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from 'react-native';
+
 import styled from 'styled-components/native';
 export const ModalContainer = styled.View`
   flex: 1;
@@ -41,3 +41,49 @@ export const SidebarItem = styled.TouchableOpacity`
   border-color: #ddd;
 `;
 
+
+
+
+// Container principal do modal picker
+export const ModalWrapper = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center; 
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const ModalBox = styled.View`
+  background-color: white;
+  width: 300px; 
+  border-radius: 10px;
+  padding: 20px; 
+  align-items: center; 
+  elevation: 5;
+  shadow-color: #000
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.3; 
+  shadow-radius: 4px;
+`;
+
+
+export const Title = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px; 
+`;
+
+
+export const ListItem = styled.TouchableOpacity`
+  padding-vertical: 12px;
+  padding-horizontal: 20px;
+  width: 100%;
+  border-bottom-width: 1px; 
+  border-bottom-color: #ccc; 
+  align-items: center; 
+`;
+
+export const ItemText = styled.Text`
+  font-size: 16px;
+  color: #555;
+`;

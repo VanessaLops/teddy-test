@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Modal, View, Text } from 'react-native';
+
 import { MaterialIcons } from '@expo/vector-icons';
 import {
     Container,
@@ -19,7 +19,6 @@ import AddIcon from 'src/assets/icons/add';
 import EditIcon from 'src/assets/icons/edti';
 import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
-import SlideUpModal from '../modal/modal-add';
 
 interface CardProps {
     clientesPorPagina: string;
@@ -61,7 +60,7 @@ const Card: React.FC<CardProps> = ({
             <CreateButton>
                 <CreateButtonText>Criar Cliente</CreateButtonText>
             </CreateButton>
-            <ModalPicker
+               <ModalPicker
                 visible={isSelectModalVisible}
                 options={options}
                 onSelectOption={handleSelectOption}
