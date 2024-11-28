@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
     Container,
@@ -13,12 +12,30 @@ import {
     ClientDetails,
     ActionButtonsContainer,
     CreateButton,
-    CreateButtonText
+    CreateButtonText,
+    PaginationContainer,
+    PageButton,
+    PageNumber
 } from './styles';
 import AddIcon from 'src/assets/icons/add';
 import EditIcon from 'src/assets/icons/edti';
 import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
+import { getUsers } from 'src/services/user-service';
+import { Text, FlatList } from 'react-native';
+
+interface User {
+    id: string;
+    name: string;
+    salary: number;
+    companyValuation: string;
+}
+
+interface UsersResponse {
+    currentPage: number;
+    totalPages: number;
+    clients: User[];
+}
 
 interface CardProps {
     clientesPorPagina: string;
@@ -34,10 +51,40 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [users, setUsers] = useState<UsersResponse | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const totalPages = users?.totalPages || 0;
+
+    const handlePageChange = (page: number) => {
+        if (page !== currentPage) {
+            setCurrentPage(page);
+        }
+    };
+
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const numClientsPerPage = Math.min(parseInt(clientesPorPagina, 10), 16);
+            const data = await getUsers(currentPage, numClientsPerPage);
+            setUsers(data);
+        } catch (error) {
+            console.error('Erro ao carregar usuários:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, [currentPage, clientesPorPagina]);
+
+    const clientsToDisplay = users?.clients.slice(0, Math.min(parseInt(clientesPorPagina, 10), 16)) || [];
 
     return (
         <Container>
-            <TitleText>2 clientes encontrados:</TitleText>
+            <TitleText>{`${clientsToDisplay.length} clientes encontrados:`}</TitleText>
             <Row>
                 <LabelText>Clientes por página:</LabelText>
                 <ButtonContainer onPress={() => setIsSelectModalVisible(true)}>
@@ -46,24 +93,52 @@ const Card: React.FC<CardProps> = ({
                 </ButtonContainer>
             </Row>
 
-            <ClientCard>
-                <ClientName>Eduardo</ClientName>
-                <ClientDetails>Salário: R$3.500,00</ClientDetails>
-                <ClientDetails>Empresa: R$120.000,00</ClientDetails>
-                <ActionButtonsContainer>
-                    <AddIcon onPress={() => setIsAddModalVisible(true)} />
-                    <EditIcon />
-                    <DeleteIcon />
-                </ActionButtonsContainer>
-            </ClientCard>
+            {loading ? (
+                <Text>Carregando...</Text>
+            ) : (
+                <FlatList
+                    data={clientsToDisplay}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item: user }) => (
+                        <ClientCard key={user.id}>
+                            <ClientName>{user.name}</ClientName>
+                            <ClientDetails>Salário: R${user.salary}</ClientDetails>
+                            <ClientDetails>Empresa: {user.companyValuation}</ClientDetails>
+                            <ActionButtonsContainer>
+                                <AddIcon onPress={() => setIsAddModalVisible(true)} />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </ActionButtonsContainer>
+                        </ClientCard>
+                    )}
+                />
+            )}
 
             <CreateButton>
                 <CreateButtonText>Criar Cliente</CreateButtonText>
             </CreateButton>
-               <ModalPicker
+
+            <PaginationContainer>
+                {[...Array(totalPages).keys()].map((pageNumber) => (
+                    <PageButton
+                        key={pageNumber}
+                        onPress={() => handlePageChange(pageNumber + 1)}
+                        selected={currentPage === pageNumber + 1}
+                    >
+                        <PageNumber selected={currentPage === pageNumber + 1}>
+                            {pageNumber + 1}
+                        </PageNumber>
+                    </PageButton>
+                ))}
+            </PaginationContainer>
+
+            <ModalPicker
                 visible={isSelectModalVisible}
                 options={options}
-                onSelectOption={handleSelectOption}
+                onSelectOption={(value: string) => {
+                    handleSelectOption(value);
+                    setIsSelectModalVisible(false);
+                }}
                 onClose={() => setIsSelectModalVisible(false)}
             />
         </Container>

@@ -15,7 +15,7 @@ export const Container = styled.SafeAreaView`
   justify-content: center; 
   align-items: center;
   background-color: #F5F5F5;
-  padding: 20px;  // Adicionado padding para o layout
+  padding: 20px; 
 `;
 
 

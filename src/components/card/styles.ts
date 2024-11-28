@@ -130,3 +130,30 @@ export const CreateButtonText = styled.Text`
   color: #ec6724;
   text-align: center;
 `;
+
+
+
+export const PaginationContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+
+export const PageButton = styled.TouchableOpacity<{ selected: boolean }>`
+  margin: 0 5px;
+  padding: 10px;
+  background-color: ${({ selected }) => (selected ? '#EC6724' : 'transparent')};
+  border-radius: 4%;
+  border: 1px solid #EC6724;
+  height:35px;
+  widht:35px;
+`;
+
+
+export const PageNumber = styled.Text<{ selected: boolean }>`
+  font-size: 12px;
+  color: ${({ selected }) => (selected ? '#fff' : '#EC6724')};
+  font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
+`;

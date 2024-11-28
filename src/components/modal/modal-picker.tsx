@@ -10,8 +10,6 @@ interface ModalPickerProps {
 }
 
 const ModalPicker: React.FC<ModalPickerProps> = ({ visible, options, onSelectOption, onClose }) => {
-
-
   const handleSelect = (item: string) => {
     onSelectOption(item); 
     onClose();             

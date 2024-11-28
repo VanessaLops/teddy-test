@@ -6,10 +6,12 @@ import { Container } from "./styles";
 import Card from "src/components/card";
 
 export default function Home() {
+
+
   const [clientesPorPagina, setClientesPorPagina] = useState("10");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const options = ["4", "8", "16"];
+  const options = ["4", "8", "10"];
 
   const handleSelectOption = (value: string) => {
     setClientesPorPagina(value);
