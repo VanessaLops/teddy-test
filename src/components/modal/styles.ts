@@ -87,3 +87,37 @@ export const ItemText = styled.Text`
   font-size: 16px;
   color: #555;
 `;
+
+
+
+
+// Caixa do modal
+export const ModalBoxAdd = styled.View`
+  background-color: white;
+  width: 80%;  
+  max-width: 400px; 
+  padding: 20px;
+  border-radius: 10px;
+
+  // justify-content: center; 
+`;
+
+export const Input = styled.TextInput`
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    height: 40px;
+    font-size: 16px;
+    width: 100%;
+`;
+
+
+export const Label = styled.Text<{ isFocused: boolean }>`
+    // position: absolute;
+    // top: ${({ isFocused }) => (isFocused ? '-10px' : '10px')};
+    // left: 10px;
+    // font-size: ${({ isFocused }) => (isFocused ? '12px' : '16px')};
+    // color: ${({ isFocused }) => (isFocused ? '#000' : '#888')};
+    // transition: all 0.2s ease;
+`;
+

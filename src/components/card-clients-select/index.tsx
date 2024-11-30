@@ -23,7 +23,7 @@ import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
 import { getUsers } from 'src/services/user-service';
 import { Text, FlatList } from 'react-native';
-import ModalClient from '../modal/modal-add';
+import ModalClient from '../modal/modal-sider';
 
 interface User {
     id: string;
@@ -52,7 +52,6 @@ const CardClientSelect: React.FC<CardProps> = ({
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState<UsersResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);

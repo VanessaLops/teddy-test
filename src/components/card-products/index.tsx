@@ -23,7 +23,7 @@ import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
 import { getUsers } from 'src/services/user-service';
 import { Text, FlatList } from 'react-native';
-import ModalClient from '../modal/modal-add';
+import ModalClient from '../modal/modal-sider';
 
 interface User {
     id: string;
@@ -107,7 +107,7 @@ const CardProduct: React.FC<CardProps> = ({
                             <ClientDetails>Salário: R${user.salary}</ClientDetails>
                             <ClientDetails>Empresa: {user.companyValuation}</ClientDetails>
                             <ActionButtonsContainer>
-                                <AddIcon onPress={() => setIsSelectModalClientVisible(true)} />
+                                <AddIcon />
                                 <EditIcon onPress={() => setIsSelectModalClientVisible(true)} />
                                 <DeleteIcon />
                             </ActionButtonsContainer>
@@ -116,7 +116,7 @@ const CardProduct: React.FC<CardProps> = ({
                 />
             )}
 
-            <CreateButton>
+            <CreateButton onPress={() => setIsSelectModalClientVisible(true)} >
                 <CreateButtonText>Criar Cliente</CreateButtonText>
             </CreateButton>
 

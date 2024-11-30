@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
     Container,
@@ -22,8 +22,9 @@ import EditIcon from 'src/assets/icons/edti';
 import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
 import { getUsers } from 'src/services/user-service';
-import { Text, FlatList } from 'react-native';
-import ModalClient from '../modal/modal-add';
+import { Text, FlatList, Button } from 'react-native';
+import BottomSheet, { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
+import ModalClient from '../modal/modal-client';
 
 interface User {
     id: string;
@@ -52,6 +53,9 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
+
+    const bottomSheetRef = useRef<BottomSheet>(null);
+
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState<UsersResponse | null>(null);
@@ -83,6 +87,15 @@ const Card: React.FC<CardProps> = ({
     }, [currentPage, clientesPorPagina]);
 
     const clientsToDisplay = users?.clients.slice(0, Math.min(parseInt(clientesPorPagina, 10), 16)) || [];
+
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+    const handlePresentModalPress = useCallback(() => {
+        bottomSheetModalRef.current?.present();
+    }, []);
+
+
+
 
     return (
         <Container>
@@ -116,7 +129,7 @@ const Card: React.FC<CardProps> = ({
                 />
             )}
 
-            <CreateButton>
+            <CreateButton onPress={() => setIsSelectModalClientVisible(true)}>
                 <CreateButtonText>Criar Cliente</CreateButtonText>
             </CreateButton>
 
@@ -146,12 +159,12 @@ const Card: React.FC<CardProps> = ({
 
             <ModalClient
                 visible={isSelectModalClientVisible}
-                onSelectOption={(value: string) => {
-                    handleSelectOption(value);
-                    setIsSelectModalClientVisible(false);
-                }}
+                bottomSheetModalRef={bottomSheetModalRef}
+                handlePresentModalPress={handlePresentModalPress}
                 onClose={() => setIsSelectModalClientVisible(false)}
             />
+
+
         </Container>
     );
 };

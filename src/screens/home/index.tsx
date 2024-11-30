@@ -5,7 +5,7 @@ import { Container } from "./styles";
 import CardClientSelect from "src/components/card-clients-select";
 import CardProduct from "src/components/card-products";
 import Card from "src/components/card-clients";
-import SlideUpSidebarModal from "src/components/modal/modal-add";
+import SlideUpSidebarModal from "src/components/modal/modal-sider";
 
 export default function Home() {
   const [currentCard, setCurrentCard] = useState<string>("home");
