@@ -12,7 +12,10 @@ function AddIcon(props) {
             xmlnsXlink="http://www.w3.org/1999/xlink"
             {...props}
         >
-            <Path fill="url(#pattern0_2086_710)" d="M0 0H17V17H0z" />
+          <Path
+                fill={props.color}
+                d="M8 0v8H0v1h8v8h1V9h8V8H9V0H8z"
+            />
             <Defs>
                 <Pattern
                     id="pattern0_2086_710"

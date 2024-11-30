@@ -43,8 +43,9 @@ interface CardProps {
     setClientesPorPagina: React.Dispatch<React.SetStateAction<string>>;
     options: string[];
     handleSelectOption: (value: string) => void;
+    clientsToDisplay: User[];  
+    onAddClient: (client: User) => void; 
 }
-
 const CardProduct: React.FC<CardProps> = ({
     clientesPorPagina,
     options,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
     Container,
@@ -22,8 +22,8 @@ import EditIcon from 'src/assets/icons/edti';
 import DeleteIcon from 'src/assets/icons/delete';
 import ModalPicker from '../modal/modal-picker';
 import { getUsers } from 'src/services/user-service';
-import { Text, FlatList, Button } from 'react-native';
-import BottomSheet, { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
+import { Text, FlatList } from 'react-native';
+import { BottomSheetModal, } from "@gorhom/bottom-sheet";
 import ModalClient from '../modal/modal-client';
 
 interface User {
@@ -44,19 +44,20 @@ interface CardProps {
     setClientesPorPagina: React.Dispatch<React.SetStateAction<string>>;
     options: string[];
     handleSelectOption: (value: string) => void;
+    clientsToDisplay: User[];
+    onAddClient: (client: User) => void;
 }
 
 const Card: React.FC<CardProps> = ({
     clientesPorPagina,
     options,
-    handleSelectOption
+    handleSelectOption,
+    onAddClient,
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
-
-    const bottomSheetRef = useRef<BottomSheet>(null);
-
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [addedClients, setAddedClients] = useState<User[]>([]);
+    console.log(addedClients);
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState<UsersResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -94,9 +95,21 @@ const Card: React.FC<CardProps> = ({
         bottomSheetModalRef.current?.present();
     }, []);
 
+    const handleAddClientClick = (client: User) => {
+        setAddedClients((prevClients) => {
+            const isAdded = prevClients.some((c) => c.id === client.id);
+            if (isAdded) {
+                return prevClients.filter((c) => c.id !== client.id);
+            } else {
+                return [...prevClients, client];
+            }
+        });
+        onAddClient(client);
+    };
 
-
-
+    const isClientAdded = (clientId: string) => {
+        return addedClients.some((client) => client.id === clientId);
+    };
     return (
         <Container>
             <TitleText>{`${clientsToDisplay.length} clientes encontrados:`}</TitleText>
@@ -120,8 +133,15 @@ const Card: React.FC<CardProps> = ({
                             <ClientDetails>Salário: R${user.salary}</ClientDetails>
                             <ClientDetails>Empresa: {user.companyValuation}</ClientDetails>
                             <ActionButtonsContainer>
-                                <AddIcon onPress={() => setIsSelectModalClientVisible(true)} />
-                                <EditIcon onPress={() => setIsSelectModalClientVisible(true)} />
+
+                                <AddIcon
+                                    name="add-circle"
+                                    onPress={() => handleAddClientClick(user)}
+                                    size={30}
+                                    color={isClientAdded(user.id) ? 'red' : 'black'}
+                                />
+
+                                <EditIcon />
                                 <DeleteIcon />
                             </ActionButtonsContainer>
                         </ClientCard>
@@ -163,8 +183,6 @@ const Card: React.FC<CardProps> = ({
                 handlePresentModalPress={handlePresentModalPress}
                 onClose={() => setIsSelectModalClientVisible(false)}
             />
-
-
         </Container>
     );
 };

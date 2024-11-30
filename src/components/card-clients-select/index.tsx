@@ -37,18 +37,20 @@ interface UsersResponse {
     totalPages: number;
     clients: User[];
 }
-
 interface CardProps {
     clientesPorPagina: string;
     setClientesPorPagina: React.Dispatch<React.SetStateAction<string>>;
     options: string[];
     handleSelectOption: (value: string) => void;
+    clientsToDisplay: User[];  
+    onAddClient: (client: User) => void; 
 }
-
 const CardClientSelect: React.FC<CardProps> = ({
     clientesPorPagina,
     options,
-    handleSelectOption
+    handleSelectOption,
+    onAddClient,
+    setClientesPorPagina,
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
@@ -56,6 +58,7 @@ const CardClientSelect: React.FC<CardProps> = ({
     const [users, setUsers] = useState<UsersResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    console.log(clientsToDisplay)
     const totalPages = users?.totalPages || 0;
 
     const handlePageChange = (page: number) => {

@@ -12,6 +12,11 @@ export default function Home() {
   const [clientesPorPagina, setClientesPorPagina] = useState("10");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [clientsToDisplay, setClientsToDisplay] = useState<any[]>([]);
+
+
+  const [selectedClients, setSelectedClients] = useState<any[]>([]);
+
   const options = ["4", "8", "10"];
 
   const handleSelectOption = (value: string) => {
@@ -20,17 +25,22 @@ export default function Home() {
 
   const handleChangeCard = (card: string) => {
     console.log("Card selecionado:", card);
-    setCurrentCard(card); 
-    setIsModalVisible(false); 
+    setCurrentCard(card);
+    setIsModalVisible(false);
   };
-  
+
+
+  const handleAddClient = (client: any) => {
+    setSelectedClients((prevSelectedClients) => [...prevSelectedClients, client]);
+  };
+
+
   useEffect(() => {
-    console.log("currentCard alterado para:", currentCard);  
+    console.log("currentCard alterado para:", currentCard);
   }, [currentCard]);
-  
-  
+
   const renderCardContent = () => {
-    console.log("Rendering card for:", currentCard); 
+
     switch (currentCard) {
       case "Clientes":
         return (
@@ -39,15 +49,19 @@ export default function Home() {
             setClientesPorPagina={setClientesPorPagina}
             options={options}
             handleSelectOption={handleSelectOption}
+            clientsToDisplay={clientsToDisplay}
+            onAddClient={handleAddClient}
           />
         );
-      case "Produtos": 
+      case "Produtos":
         return (
           <CardProduct
             clientesPorPagina={clientesPorPagina}
             setClientesPorPagina={setClientesPorPagina}
             options={options}
             handleSelectOption={handleSelectOption}
+            clientsToDisplay={clientsToDisplay}
+            onAddClient={handleAddClient}
           />
         );
       case "Home":
@@ -58,22 +72,24 @@ export default function Home() {
             setClientesPorPagina={setClientesPorPagina}
             options={options}
             handleSelectOption={handleSelectOption}
+            clientsToDisplay={clientsToDisplay}
+            onAddClient={handleAddClient}
           />
         );
     }
   };
-  
+
   return (
     <Container>
       <StatusBar style="auto" />
-      <Header handleSelectOption={handleChangeCard} /> 
-     
+      <Header handleSelectOption={handleChangeCard} />
+
       <SlideUpSidebarModal
         visible={isModalVisible}
-        onSelectOption={handleChangeCard} 
-        onClose={() => setIsModalVisible(false)} 
+        onSelectOption={handleChangeCard}
+        onClose={() => setIsModalVisible(false)}
       />
-      
+
       {renderCardContent()}
     </Container>
   );
