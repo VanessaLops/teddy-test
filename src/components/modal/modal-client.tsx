@@ -1,41 +1,102 @@
 import React, { useMemo, useEffect, useState, MutableRefObject } from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
 import { Input, Label } from './styles';
 import { Title } from 'src/styles';
 import { LoginButton } from 'src/screens/login/styles';
 import { ButtonText } from '../card-clients-select/styles';
+import { createClient, updateClient } from 'src/services/api'; 
+import { ModalClientProps } from '../types';
 
-interface ModalClientProps {
-    visible: boolean;
-    bottomSheetModalRef: MutableRefObject<BottomSheetModal>;
-    handlePresentModalPress: () => void;
-    onClose: () => void;
-}
+
 
 const ModalClient: React.FC<ModalClientProps> = ({
     visible,
     bottomSheetModalRef,
-    handlePresentModalPress,
-    onClose
+    onClose,
+    isEditMode,
+    clientData
 }) => {
+    const [userId, setUserId] = useState('');
     const [name, setName] = useState('');
-    const [salary, setSalary] = useState('');
+    const [salary, setSalary] = useState(0);
     const [companyValue, setCompanyValue] = useState('');
 
     const [isFocusedName, setIsFocusedName] = useState(false);
     const [isFocusedSalary, setIsFocusedSalary] = useState(false);
     const [isFocusedCompanyValue, setIsFocusedCompanyValue] = useState(false);
 
-    const snapPoints = useMemo(() => ['25%', '70%'], []);
+    const snapPoints = useMemo(() => ['14%', '70%'], []);
+
 
     useEffect(() => {
-        if (visible) {
-            bottomSheetModalRef?.current?.present();
-        } else {
-            bottomSheetModalRef?.current?.dismiss();
+        if (visible && isEditMode && clientData) {
+            setUserId(clientData.id);
+            setName(clientData.name);
+            setSalary(clientData.salary);
+            setCompanyValue(clientData.companyValuation ?? '');
         }
-    }, [visible, bottomSheetModalRef]);
+
+        if (!visible) {
+            setName('');
+            setSalary(0);
+            setCompanyValue('');
+        }
+
+        bottomSheetModalRef?.current?.present();
+    }, [visible, isEditMode, clientData, bottomSheetModalRef]);
+
+    const handleCreateClient = async () => {
+        if (!name || !salary) {
+            Alert.alert("Erro", "Nome e salário são obrigatórios!");
+            return;
+        }
+
+        const clientData = {
+            name,
+            salary: Number(salary),
+            companyValuation: companyValue ? parseFloat(companyValue) : null,
+        };
+
+        try {
+            const result = await createClient(clientData);
+            if (result) {
+                Alert.alert("Sucesso", "Cliente criado com sucesso!");
+                onClose();
+            } else {
+                Alert.alert("Erro", "Não foi possível criar o cliente.");
+            }
+        } catch (error) {
+            console.error("Erro ao criar cliente:", error);
+            Alert.alert("Erro", "Ocorreu um erro ao criar o cliente.");
+        }
+    };
+
+    const handleEditClient = async () => {
+        if (!name || !salary) {
+            Alert.alert("Erro", "Nome e salário são obrigatórios!");
+            return;
+        }
+
+        const clientData = {
+            name,
+            salary: Number(salary),
+            companyValuation: companyValue ? parseFloat(companyValue) : null,
+        };
+
+        try {
+            const result = await updateClient(userId,clientData);  
+            if (result) {
+                Alert.alert("Sucesso", "Cliente atualizado com sucesso!");
+                onClose();
+            } else {
+                Alert.alert("Erro", "Não foi possível atualizar o cliente.");
+            }
+        } catch (error) {
+            console.error("Erro ao editar cliente:", error);
+            Alert.alert("Erro", "Ocorreu um erro ao editar o cliente.");
+        }
+    };
 
     return (
         <BottomSheetModalProvider>
@@ -45,7 +106,9 @@ const ModalClient: React.FC<ModalClientProps> = ({
                 onDismiss={onClose}
             >
                 <BottomSheetView style={{ padding: 20 }}>
-                    <Title style={{ color: '#fff', marginBottom: 20 }}>Criar cliente</Title>
+                    <Title style={{ color: '#fff', marginBottom: 20 }}>
+                        {isEditMode ? 'Editar Cliente' : 'Criar Cliente'}
+                    </Title>
                     <View style={{ marginBottom: 20 }}>
                         <Label isFocused={isFocusedName || name.length > 0} style={{ marginBottom: 5, marginTop: 10 }}>Nome</Label>
                         <Input
@@ -57,13 +120,13 @@ const ModalClient: React.FC<ModalClientProps> = ({
                             placeholderTextColor="#888"
                         />
 
-                        <Label isFocused={isFocusedSalary || salary.length > 0} style={{ marginBottom: 5, marginTop: 10 }}>Salário</Label>
+                        <Label isFocused={isFocusedSalary || salary > 0} style={{ marginBottom: 5, marginTop: 10 }}>Salário</Label>
                         <Input
                             value={salary}
                             onFocus={() => setIsFocusedSalary(true)}
                             onBlur={() => setIsFocusedSalary(false)}
                             onChangeText={setSalary}
-                            placeholder={!isFocusedSalary && salary === '' ? 'Digite o salário:' : ''}
+                            placeholder={!isFocusedSalary && salary === 0 ? 'Digite o salário:' : ''}
                             placeholderTextColor="#888"
                             keyboardType="numeric"
                         />
@@ -81,8 +144,8 @@ const ModalClient: React.FC<ModalClientProps> = ({
                             keyboardType="numeric"
                         />
                     </View>
-                    <LoginButton>
-                        <ButtonText>Criar cliente</ButtonText>
+                    <LoginButton onPress={isEditMode ? handleEditClient : handleCreateClient}>
+                        <ButtonText>{isEditMode ? 'Editar Cliente' : 'Criar Cliente'}</ButtonText>
                     </LoginButton>
                 </BottomSheetView>
             </BottomSheetModal>

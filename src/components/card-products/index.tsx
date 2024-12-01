@@ -9,43 +9,18 @@ import {
     ButtonText,
     ClientCard,
     ClientName,
-    ClientDetails,
-    ActionButtonsContainer,
     CreateButton,
     CreateButtonText,
     PaginationContainer,
     PageButton,
     PageNumber
 } from './styles';
-import AddIcon from 'src/assets/icons/add';
-import EditIcon from 'src/assets/icons/edti';
-import DeleteIcon from 'src/assets/icons/delete';
-import ModalPicker from '../modal/modal-picker';
-import { getUsers } from 'src/services/user-service';
+import { getUsers } from 'src/services/api';
 import { Text, FlatList } from 'react-native';
 import ModalClient from '../modal/modal-sider';
+import { CardProps, UsersResponse } from '../types';
 
-interface User {
-    id: string;
-    name: string;
-    salary: number;
-    companyValuation: string;
-}
 
-interface UsersResponse {
-    currentPage: number;
-    totalPages: number;
-    clients: User[];
-}
-
-interface CardProps {
-    clientesPorPagina: string;
-    setClientesPorPagina: React.Dispatch<React.SetStateAction<string>>;
-    options: string[];
-    handleSelectOption: (value: string) => void;
-    clientsToDisplay: User[];  
-    onAddClient: (client: User) => void; 
-}
 const CardProduct: React.FC<CardProps> = ({
     clientesPorPagina,
     options,
@@ -53,7 +28,6 @@ const CardProduct: React.FC<CardProps> = ({
 }) => {
     const [isSelectModalVisible, setIsSelectModalVisible] = useState(false);
     const [isSelectModalClientVisible, setIsSelectModalClientVisible] = useState(false);
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState<UsersResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -83,11 +57,10 @@ const CardProduct: React.FC<CardProps> = ({
         fetchUsers();
     }, [currentPage, clientesPorPagina]);
 
-    const clientsToDisplay = users?.clients.slice(0, Math.min(parseInt(clientesPorPagina, 10), 16)) || [];
 
     return (
         <Container>
-            <TitleText>{`${clientsToDisplay.length} Produtos:`}</TitleText>
+            <TitleText>{`0 Produtos:`}</TitleText>
             <Row>
                 <LabelText>Produtos por página:</LabelText>
                 <ButtonContainer onPress={() => setIsSelectModalVisible(true)}>
@@ -99,26 +72,13 @@ const CardProduct: React.FC<CardProps> = ({
             {loading ? (
                 <Text>Carregando...</Text>
             ) : (
-                <FlatList
-                    data={clientsToDisplay}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item: user }) => (
-                        <ClientCard key={user.id}>
-                            <ClientName>{user.name}</ClientName>
-                            <ClientDetails>Salário: R${user.salary}</ClientDetails>
-                            <ClientDetails>Empresa: {user.companyValuation}</ClientDetails>
-                            <ActionButtonsContainer>
-                                <AddIcon />
-                                <EditIcon onPress={() => setIsSelectModalClientVisible(true)} />
-                                <DeleteIcon />
-                            </ActionButtonsContainer>
-                        </ClientCard>
-                    )}
-                />
+                <ClientCard>
+                    <ClientName>Dados Indisponivel Aguarde...</ClientName>
+                </ClientCard>
             )}
 
             <CreateButton onPress={() => setIsSelectModalClientVisible(true)} >
-                <CreateButtonText>Criar Cliente</CreateButtonText>
+                <CreateButtonText>Criar Produto</CreateButtonText>
             </CreateButton>
 
             <PaginationContainer>
@@ -135,15 +95,6 @@ const CardProduct: React.FC<CardProps> = ({
                 ))}
             </PaginationContainer>
 
-            <ModalPicker
-                visible={isSelectModalVisible}
-                options={options}
-                onSelectOption={(value: string) => {
-                    handleSelectOption(value);
-                    setIsSelectModalVisible(false);
-                }}
-                onClose={() => setIsSelectModalVisible(false)}
-            />
 
             <ModalClient
                 visible={isSelectModalClientVisible}

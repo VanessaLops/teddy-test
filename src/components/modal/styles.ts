@@ -44,7 +44,6 @@ export const SidebarItem = styled.TouchableOpacity`
 
 
 
-// Container principal do modal picker
 export const ModalWrapper = styled.View`
   flex: 1;
   justify-content: center;
@@ -91,7 +90,7 @@ export const ItemText = styled.Text`
 
 
 
-// Caixa do modal
+
 export const ModalBoxAdd = styled.View`
   background-color: white;
   width: 80%;  

@@ -3,10 +3,8 @@ import LogoIcon from "src/assets/icons/logo";
 import { Icon } from "react-native-elements";
 import { Container, ContainerMain } from "./styles";
 import SlideUpSidebarModal from "../modal/modal-sider";
+import { HeaderProps } from "../types";
 
-interface HeaderProps {
-  handleSelectOption: (value: string) => void; 
-}
 
 const Header: React.FC<HeaderProps> = ({ handleSelectOption }) => {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);

@@ -6,8 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ButtonText, Container, ContentWrapper, Input, LoginButton, Title } from "./styles";
 
-type RootStackParamList = {
+export type RootStackParamList = {
     Home: undefined;
+    Clientes: { clients: any[] };
 };
 
 

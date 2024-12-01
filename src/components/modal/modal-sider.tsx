@@ -4,12 +4,7 @@ import { ModalContainer, ModalContent } from './styles';
 import HomeIcon from 'src/assets/icons/home';
 import ClientsIcon from 'src/assets/icons/clients';
 import ProductIcon from 'src/assets/icons/product';
-
-interface SlideUpSidebarModalProps {
-  visible: boolean;
-  onSelectOption: (value: string) => void;  
-  onClose: () => void; 
-}
+import { SlideUpSidebarModalProps } from '../types';
 
 const SlideUpSidebarModal: React.FC<SlideUpSidebarModalProps> = ({ visible, onSelectOption, onClose }) => {
   const [slideAnim] = useState(new Animated.Value(0));

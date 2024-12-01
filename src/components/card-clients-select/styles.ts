@@ -80,11 +80,11 @@ export const ModalItemText = styled.Text`
 
 
 export const ClientCard = styled.View`
-  width: 100%;
+  width: 300px;
   background-color: white;
   margin-top: 20px;
   padding: 20px;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   align-self: center;
   flex-wrap: wrap;
